@@ -52,6 +52,11 @@ class PalindromeController extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Empty method to clear the history
-  void clearHistory() {}
+  // Clear the history and reset result state
+  void clearHistory() {
+    _history = [];
+    _lastResultMessage = null; // Clear last result message
+    _lastResultIsPalindrome = null; // Clear last result status
+    notifyListeners(); // Notify UI of state change
+  }
 }
