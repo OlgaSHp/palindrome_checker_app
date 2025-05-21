@@ -78,9 +78,29 @@ class _PalindromeCheckerState extends State<PalindromeChecker> {
               },
             ),
             const SizedBox(height: 16), // Spacer between input and history
-            // History list with state updates
+            // Consumer widget to listen for PalindromeController updates
             Consumer<PalindromeController>(
               builder: (context, controller, child) {
+                // Check if there’s a new result message to display
+                if (controller.lastResultMessage != null) {
+                  // Schedule SnackBar display after the frame is built
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        // Display the result message (e.g., "✅ 'racecar' is a palindrome!")
+                        content: Text(controller.lastResultMessage!),
+                        // Show SnackBar for 3 seconds
+                        duration: const Duration(seconds: 3),
+                        // Set background color based on palindrome result
+                        backgroundColor:
+                            controller.lastResultIsPalindrome!
+                                ? Colors
+                                    .green // Green for palindrome
+                                : Colors.red, // Red for non-palindrome
+                      ),
+                    );
+                  });
+                }
                 return Expanded(
                   child:
                       controller.history.isEmpty
