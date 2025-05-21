@@ -20,6 +20,28 @@ class PalindromeController extends ChangeNotifier {
   // Public getter for last palindrome result
   bool? get lastResultIsPalindrome => _lastResultIsPalindrome;
 
+  // Constructor: Load history on initialization
+  PalindromeController() {
+    _loadHistory();
+  }
+
+  // Load history from SharedPreferences
+  Future<void> _loadHistory() async {
+    // Get SharedPreferences instance
+    final prefs = await SharedPreferences.getInstance();
+    // Retrieve history JSON string
+    final historyString = prefs.getString('palindrome_history');
+    if (historyString != null) {
+      // Decode JSON to list
+      final List<dynamic> historyJson = jsonDecode(historyString);
+      // Convert JSON to PalindromeCheck objects
+      _history =
+          historyJson.map((json) => PalindromeCheck.fromJson(json)).toList();
+      // Notify listeners (UI) of loaded history
+      notifyListeners();
+    }
+  }
+
   // Save history to SharedPreferences
   Future<void> _saveHistory() async {
     // Get SharedPreferences instance
