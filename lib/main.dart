@@ -27,6 +27,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // Return a MaterialApp widget to configure the app
     return MaterialApp(
+      // Disable the debug banner to remove the "DEBUG" ribbon
+      debugShowCheckedModeBanner: false,
       // Set the app title for accessibility and system UI
       title: 'Palindrome Checker',
       // Define the app's theme
