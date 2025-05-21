@@ -1,5 +1,6 @@
 // Main UI widget for the palindrome checker
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:palindrome_checker_app/palindrome_controller.dart';
 import 'package:provider/provider.dart';
 
@@ -74,6 +75,40 @@ class _PalindromeCheckerState extends State<PalindromeChecker> {
                   ).checkPalindrome(value);
                   _textController.clear(); // Clear input after submission
                 }
+              },
+            ),
+            const SizedBox(height: 16), // Spacer between input and history
+            // History list with state updates
+            Consumer<PalindromeController>(
+              builder: (context, controller, child) {
+                return Expanded(
+                  child:
+                      controller.history.isEmpty
+                          ? const Center(
+                            child: Text('No history yet'),
+                          ) // Empty state
+                          : ListView.builder(
+                            itemCount: controller.history.length,
+                            itemBuilder: (context, index) {
+                              final check = controller.history[index];
+                              return ListTile(
+                                title: Text(check.input), // Show input
+                                subtitle: Text(
+                                  'Checked: ${DateFormat('MMM d, yyyy HH:mm').format(check.timestamp)}', // Show timestamp
+                                ),
+                                trailing: Icon(
+                                  check.isPalindrome
+                                      ? Icons.check_circle
+                                      : Icons.cancel, // Icon based on result
+                                  color:
+                                      check.isPalindrome
+                                          ? Colors.green
+                                          : Colors.red,
+                                ),
+                              );
+                            },
+                          ),
+                );
               },
             ),
           ],
