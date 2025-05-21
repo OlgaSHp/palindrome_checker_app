@@ -53,5 +53,30 @@ void main() {
         );
       },
     );
+    // Test handling of empty or whitespace-only inputs
+    test('checkPalindrome ignores empty or whitespace-only input', () async {
+      // Test empty input
+      controller.checkPalindrome('');
+      expect(controller.history.isEmpty, true);
+      expect(controller.lastResultMessage, isNull);
+      expect(controller.lastResultIsPalindrome, isNull);
+
+      // Test whitespace-only input
+      controller.checkPalindrome('   ');
+      expect(controller.history.isEmpty, true);
+      expect(controller.lastResultMessage, isNull);
+      expect(controller.lastResultIsPalindrome, isNull);
+    });
+
+    // Test history order (newest first)
+    test('history maintains correct order', () async {
+      // Add two checks
+      controller.checkPalindrome('first');
+      controller.checkPalindrome('second');
+      // Verify length and order
+      expect(controller.history.length, 2);
+      expect(controller.history[0].input, 'second');
+      expect(controller.history[1].input, 'first');
+    });
   });
 }
