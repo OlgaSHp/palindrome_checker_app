@@ -28,6 +28,19 @@ class _PalindromeCheckerState extends State<PalindromeChecker> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Palindrome Checker'), // App title
+
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete_sweep), // Clear history icon
+            onPressed: () {
+              Provider.of<PalindromeController>(
+                context,
+                listen: false,
+              ).clearHistory(); // Call controller to clear history
+            },
+            tooltip: 'Clear History', // Tooltip for accessibility
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0), // Add padding to content
