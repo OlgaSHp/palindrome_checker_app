@@ -17,8 +17,40 @@ class PalindromeController extends ChangeNotifier {
   // Public getter for last palindrome result
   bool? get lastResultIsPalindrome => _lastResultIsPalindrome;
 
-  // Empty method to check if an input is a palindrome
-  void checkPalindrome(String input) {}
+  // Check if an input string is a palindrome
+  void checkPalindrome(String input) {
+    // Ignore empty or whitespace-only inputs
+    if (input.trim().isEmpty) return;
+
+    // Clean input: convert to lowercase, remove non-alphanumeric characters
+    final cleanedInput = input.toLowerCase().replaceAll(
+      RegExp(r'[^a-z0-9]'),
+      '',
+    );
+    // Check if cleaned input equals its reverse
+    final isPalindrome = cleanedInput == cleanedInput.split('').reversed.join();
+
+    // Add new check to history (newest first)
+    _history.insert(
+      0,
+      PalindromeCheck(
+        input: input.trim(), // Store original trimmed input
+        isPalindrome: isPalindrome, // Store palindrome result
+        timestamp: DateTime.now(), // Record current time
+      ),
+    );
+
+    // Set result message with emoji for SnackBar
+    _lastResultMessage =
+        isPalindrome
+            ? '✅ "${input.trim()}" is a palindrome!'
+            : '❌ "${input.trim()}" is not a palindrome.';
+    // Set palindrome result for SnackBar color
+    _lastResultIsPalindrome = isPalindrome;
+
+    // Notify listeners (UI) of state change
+    notifyListeners();
+  }
 
   // Empty method to clear the history
   void clearHistory() {}
