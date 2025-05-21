@@ -78,5 +78,19 @@ void main() {
       expect(controller.history[0].input, 'second');
       expect(controller.history[1].input, 'first');
     });
+
+    // Test clearing history
+    test('clearHistory resets history and result', () async {
+      // Add a check
+      controller.checkPalindrome('test');
+      expect(controller.history.isNotEmpty, true);
+
+      // Clear history
+      controller.clearHistory();
+      // Verify history and results are reset
+      expect(controller.history.isEmpty, true);
+      expect(controller.lastResultMessage, isNull);
+      expect(controller.lastResultIsPalindrome, isNull);
+    });
   });
 }
