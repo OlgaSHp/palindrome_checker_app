@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:palindrome_checker_app/models/palindrome_check.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Controller to manage palindrome checking logic and state
 class PalindromeController extends ChangeNotifier {
@@ -16,6 +19,16 @@ class PalindromeController extends ChangeNotifier {
   String? get lastResultMessage => _lastResultMessage;
   // Public getter for last palindrome result
   bool? get lastResultIsPalindrome => _lastResultIsPalindrome;
+
+  // Save history to SharedPreferences
+  Future<void> _saveHistory() async {
+    // Get SharedPreferences instance
+    final prefs = await SharedPreferences.getInstance();
+    // Convert history to JSON
+    final historyJson = _history.map((check) => check.toJson()).toList();
+    // Save JSON string to SharedPreferences
+    await prefs.setString('palindrome_history', jsonEncode(historyJson));
+  }
 
   // Check if an input string is a palindrome
   void checkPalindrome(String input) {
@@ -48,15 +61,19 @@ class PalindromeController extends ChangeNotifier {
     // Set palindrome result for SnackBar color
     _lastResultIsPalindrome = isPalindrome;
 
+    // Save updated history
+    _saveHistory();
     // Notify listeners (UI) of state change
     notifyListeners();
   }
 
   // Clear the history and reset result state
   void clearHistory() {
-    _history = [];
+    _history = []; // Reset history list
     _lastResultMessage = null; // Clear last result message
     _lastResultIsPalindrome = null; // Clear last result status
+    // Save empty history
+    _saveHistory();
     notifyListeners(); // Notify UI of state change
   }
 }
