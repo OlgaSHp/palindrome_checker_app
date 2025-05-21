@@ -92,5 +92,21 @@ void main() {
       expect(controller.lastResultMessage, isNull);
       expect(controller.lastResultIsPalindrome, isNull);
     });
+
+    // Test history persistence with SharedPreferences
+    test('history persists and loads correctly', () async {
+      // Add a check
+      controller.checkPalindrome('test');
+      expect(controller.history.length, 1);
+      expect(controller.history.first.input, 'test');
+
+      // Simulate app restart by creating a new controller
+      final newController = PalindromeController();
+      // Wait for async initialization
+      await Future.delayed(Duration.zero);
+      // Verify history is loaded
+      expect(newController.history.length, 1);
+      expect(newController.history.first.input, 'test');
+    });
   });
 }
