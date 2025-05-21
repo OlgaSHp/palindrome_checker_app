@@ -9,4 +9,19 @@ class PalindromeCheck {
     required this.isPalindrome,
     required this.timestamp,
   });
+
+  // Convert PalindromeCheck to JSON for storage in SharedPreferences
+  Map<String, dynamic> toJson() => {
+    'input': input,
+    'isPalindrome': isPalindrome,
+    'timestamp': timestamp.toIso8601String(),
+  };
+
+  // Create PalindromeCheck from JSON when loading from SharedPreferences
+  factory PalindromeCheck.fromJson(Map<String, dynamic> json) =>
+      PalindromeCheck(
+        input: json['input'],
+        isPalindrome: json['isPalindrome'],
+        timestamp: DateTime.parse(json['timestamp']),
+      );
 }
